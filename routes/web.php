@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UnsubscribeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/unsubscribe', [UnsubscribeController::class, 'index'])
+    ->name('unsubscribe');
+
+Route::post('/unsubscribe', [UnsubscribeController::class, 'store'])
+    ->name('unsubscribe.store');

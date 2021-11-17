@@ -1,17 +1,6 @@
 <x-app-layout>
-	@if(session()->has('success'))
-		<div class="alert alert-info" role="alert">
-			<p> {{ session()->get('success') }} </p>
-		</div>
-	@elseif (isset($errors) && $errors->any())
-		<div class="alert alert-danger" role="alert">
-			@foreach ($errors->all() as $error)
-				<p> {{ $error }} </p>
-			@endforeach
-		</div>
-	@endif
     <div class="container">
-        <div class="row">
+        <div class="row" style="margin-bottom: 20px;">
             <div class="col-12">
                 <div class="page-title-box">
                     <h4 class="page-title">{{ __('Unsubscribe') }}</h4>
@@ -19,9 +8,22 @@
             </div>
         </div>
         <div class="row">
+			@if(session()->has('success'))
+				<div class="alert alert-success" role="alert" style="width: 100%">
+					{{ session()->get('success') }}
+				</div>
+			@elseif (isset($errors) && $errors->any())
+				<div class="alert alert-danger" role="alert">
+					@foreach ($errors->all() as $error)
+						{{ $error }}
+					@endforeach
+				</div>
+			@endif
+			@if(!session()->has('success'))
         	<div class="card">
-        		<div class="col-12" style="padding: 20px;">
+        		<div class="col-12" style="padding: 30px;">
 				<form action="{{ route('unsubscribe.store') }}" method="post">
+					@csrf
 					<input type="hidden" name="PersonID" value="{{ $customer->PersonID }}">
 					<input type="hidden" name="EmailHashSum" value="{{ $customer->EmailHashSum }}">
 					<div class="form-group">
@@ -50,10 +52,10 @@
 	                <div class="form-group mt-2">
                     	<button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                 	</div>
-                </div>
         		</form>
+        		</div>
         	</div>
-        	</div>
+			@endif
         </div>
     </div>
 </x-app-layout>

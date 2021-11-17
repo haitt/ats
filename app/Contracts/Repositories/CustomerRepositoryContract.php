@@ -15,7 +15,7 @@ interface CustomerRepository
     /**
      * Update customer by array data.
      *
-     * @param  array  $customer
+     * @param  mixed  $customer
      * @param  array  $data
      * @return void
      */

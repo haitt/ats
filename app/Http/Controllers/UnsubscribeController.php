@@ -3,28 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\Repositories\CustomerRepository;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 class UnsubscribeController extends Controller
 {
     /**
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customer = app(CustomerRepository::class)->findByAttributes();
+        $data = [
+            'PersonID' => $request->get('uid'),
+            'EmailHashSum' => $request->get('md5'),
+        ];
+
+        $customer = app(CustomerRepository::class)->findByAttributes($data);
 
         return view('unsubscribe', compact('customer'));
     }
 
-    public function update(Request $request)
+    public function store(Request $request)
     {
         $requestData = $request->all();
 
-        $customer = app(CustomerRepository::class)->findByAttributes($requestData)->first();
+        $customer = app(CustomerRepository::class)->findByAttributes($requestData);
 
         app(CustomerRepository::class)->update($customer, $requestData);
 
-        return redirect()->route('unsubscribe')->with('success', 'Unsubscribe was submitted successfully.');
+        return redirect()->route('unsubscribe', ['uid' => $customer->PersonID, 'md5' => $customer->EmailHashSum])->with('success', 'Unsubscribe was submitted successfully.');
     }
 }
